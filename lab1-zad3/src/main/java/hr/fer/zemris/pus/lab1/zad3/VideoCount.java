@@ -1,4 +1,4 @@
-package hr.fer.zemris.pus.lab1.zad2;
+package hr.fer.zemris.pus.lab1.zad3;
 
 import java.io.IOException;
 
@@ -26,6 +26,10 @@ public class VideoCount {
 		conf.setReducerClass(VideoCountReduce.class);
 		conf.setOutputKeyClass(Text.class);
 		conf.setOutputValueClass(IntWritable.class);
+		
+		// reverse the order of keys
+		conf.setOutputKeyComparatorClass(ReversedTextComparator.class);
+		
 		JobClient.runJob(conf);
 	}
 }

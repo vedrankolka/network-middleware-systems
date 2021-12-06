@@ -1,4 +1,4 @@
-package hr.fer.zemris.pus.lab1.zad2;
+package hr.fer.zemris.pus.lab1.zad3;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.WritableComparable;

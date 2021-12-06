@@ -31,7 +31,7 @@ public class MatrixMultiplication {
 		job1.setMapperClass(MatrixMultiplicationMap1.class);
 		job1.setReducerClass(MatrixMultiplicationReduce1.class);
 		job1.setOutputKeyClass(IntWritable.class);
-		job1.setOutputValueClass(Text.class);
+		job1.setOutputValueClass(MatrixElementWritable.class);
 		JobClient.runJob(job1);
 		// secondly sum all the mapped values
 		JobConf job2 = new JobConf(MatrixMultiplication.class);
