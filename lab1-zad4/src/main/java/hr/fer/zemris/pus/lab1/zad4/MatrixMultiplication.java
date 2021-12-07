@@ -12,19 +12,16 @@ import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 
 public class MatrixMultiplication {
-	
-	public static String first;
-	public static String second;
 
 	public static void main(String[] args) throws IOException {
 		if (args.length != 4) {
 			System.err.println("Usage: <input path> <output path> <first_name> <second_name>");
 			System.exit(-1);
 		}
-		first = args[2];
-		second = args[3];
 		// firstly map to all values to sum
 		JobConf job1 = new JobConf(MatrixMultiplication.class);
+		job1.set("first", args[2]);
+		job1.set("second", args[3]);
 		job1.setJobName("Matrix multiplication 1/2");
 		FileInputFormat.addInputPath(job1, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job1, new Path("temp/"));

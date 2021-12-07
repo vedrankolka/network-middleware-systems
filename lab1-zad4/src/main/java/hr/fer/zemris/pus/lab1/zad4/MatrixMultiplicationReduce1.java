@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.MapReduceBase;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reducer;
@@ -17,7 +18,18 @@ public class MatrixMultiplicationReduce1 extends MapReduceBase implements Reduce
 
 	// Reduce1 prodem kroz sve i sta?
 	// 	j, [(M, i, m_ij), (N, k, n_jk)] -> emit((i,k), (m_ij*n_kj*))
+	private String first;
+	private String second;
 	
+	
+	
+	@Override
+	public void configure(JobConf job) {
+		super.configure(job);
+		this.first = job.get("first", "a");
+		this.second = job.get("second", "b");
+	}
+
 	@Override
 	public void reduce(IntWritable key, Iterator<MatrixElementWritable> values, OutputCollector<Text, DoubleWritable> output,
 			Reporter reporter) throws IOException {
@@ -26,9 +38,9 @@ public class MatrixMultiplicationReduce1 extends MapReduceBase implements Reduce
 		Iterable<MatrixElementWritable> it = () -> values;
 		for (MatrixElementWritable element : it) {
 //			System.out.println("element: " + element);
-			if ("a".equals(element.matrixName.toString())) { // TODO MatrixMultiplication.first
+			if (first.equals(element.matrixName.toString())) {
 				firstMatrix.add(element.copy());		
-			} else {
+			} else if (second.equals(element.matrixName.toString())){
 				secondMatrix.add(element.copy());
 			} 
 		}
