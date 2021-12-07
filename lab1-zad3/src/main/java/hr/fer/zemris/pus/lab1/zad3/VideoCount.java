@@ -18,18 +18,26 @@ public class VideoCount {
 			System.exit(-1);
 		}
 		
-		JobConf conf = new JobConf(VideoCount.class);
-		conf.setJobName("Video count");
-		FileInputFormat.addInputPath(conf, new Path(args[0]));
-		FileOutputFormat.setOutputPath(conf, new Path(args[1]));
-		conf.setMapperClass(VideoCountMap.class);
-		conf.setReducerClass(VideoCountReduce.class);
-		conf.setOutputKeyClass(Text.class);
-		conf.setOutputValueClass(IntWritable.class);
+		JobConf job1 = new JobConf(VideoCount.class);
+		job1.setJobName("Video count 1/2");
+		FileInputFormat.addInputPath(job1, new Path(args[0]));
+		FileOutputFormat.setOutputPath(job1, new Path("temp"));
+		job1.setMapperClass(VideoCountMap.class);
+		job1.setReducerClass(VideoCountReduce.class);
+		job1.setOutputKeyClass(Text.class);
+		job1.setOutputValueClass(IntWritable.class);
+		JobClient.runJob(job1);
 		
-		// reverse the order of keys
-		conf.setOutputKeyComparatorClass(ReversedTextComparator.class);
-		
-		JobClient.runJob(conf);
+		JobConf job2 = new JobConf(VideoCount.class);
+		job2.setJobName("Video count 2/2");
+		FileInputFormat.addInputPath(job2, new Path("temp/part-00000"));
+		FileOutputFormat.setOutputPath(job2, new Path(args[1]));
+		job2.setMapperClass(VideoCountIdentityMap.class);
+		job2.setReducerClass(VideoCountIdentityReduce.class);
+		job2.setOutputKeyClass(Text.class);
+		job2.setOutputValueClass(Text.class);
+		// add custom sorting of the keys
+		job2.setOutputKeyComparatorClass(CustomTextComparator.class);
+		JobClient.runJob(job2);
 	}
 }

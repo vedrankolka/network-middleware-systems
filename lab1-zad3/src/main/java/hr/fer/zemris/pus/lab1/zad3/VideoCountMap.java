@@ -12,7 +12,7 @@ import org.apache.hadoop.mapred.Reporter;
 
 public class VideoCountMap extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
 
-	private static final int THRESHOLD = 5;
+	private static final int THRESHOLD = 0;
 
 	@Override
 	public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter)
